@@ -1,0 +1,414 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS  (see BUILD_SPEC.txt §3)
+   Visual-first, premium, clean. Blue accent (placeholder brand).
+   ============================================================ */
+:root {
+  --background: #f1efe8;
+  --background-muted: #e9e5db;
+  --foreground: #0b0b0f;
+  --muted-foreground: #5a6070;
+  --border: #e6e8ec;
+  --card: #ffffff;
+  --primary: #155fff;
+  --primary-foreground: #ffffff;
+  --accent-soft: #e8f0ff;
+  --ring: #155fff;
+
+  --radius: 0.75rem; /* 12px — buttons/cards */
+  --radius-lg: 1rem; /* 16px — images/panels */
+
+  --shadow-sm: 0 1px 2px 0 rgb(11 11 15 / 0.04), 0 1px 3px 0 rgb(11 11 15 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(11 11 15 / 0.08), 0 2px 6px -2px rgb(11 11 15 / 0.06);
+  --shadow-xl: 0 24px 60px -12px rgb(11 11 15 / 0.18), 0 8px 24px -8px rgb(11 11 15 / 0.1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-muted: var(--background-muted);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  --radius-md: var(--radius);
+  --radius-xl: var(--radius-lg);
+
+  --shadow-soft-sm: var(--shadow-sm);
+  --shadow-soft-md: var(--shadow-md);
+  --shadow-soft-xl: var(--shadow-xl);
+}
+
+/* In @layer base so border-color utilities (border-slate-200, brand borders…) still win. */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  /* page base color lives here so the fixed globe layer (-z-10 on body)
+     is not painted over by an opaque body background */
+  background: var(--background);
+}
+
+body {
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Fluid type scale */
+.text-display {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+.text-h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.text-h3 {
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+.text-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Focus ring for accessibility */
+:where(a, button, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Inputs inside a styled pill show focus on the wrapper, not the field itself */
+input.pill-input,
+input.pill-input:focus,
+input.pill-input:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Reduced motion: kill transforms, keep opacity */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Marquee keyframes (text-name scroller) */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee-x var(--marquee-duration, 32s) linear infinite;
+}
+.marquee-group:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Vertical marquee (scrolls upward) */
+@keyframes marquee-y {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+.animate-marquee-y {
+  animation: marquee-y var(--marquee-duration, 18s) linear infinite;
+}
+.marquee-group:hover .animate-marquee-y {
+  animation-play-state: paused;
+}
+
+/* Radix accordion expand/collapse */
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* Mobile sheet / overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Subtle grain/scrim helper for text over the globe */
+.text-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    rgb(255 255 255 / 0.85) 0%,
+    rgb(255 255 255 / 0.6) 45%,
+    rgb(255 255 255 / 0) 75%
+  );
+}
+
+/* Custom Masonry Grid styling to ensure proper layout spacing and columns */
+.masonry-grid {
+  column-count: 1;
+  column-gap: 1.5rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- Pearl / Stardust button ---- */
+.pearl-button .wrap::before,
+.pearl-button .wrap::after {
+  content: "";
+  position: absolute;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+.pearl-button .wrap::before {
+  left: -15%;
+  right: -15%;
+  bottom: 25%;
+  top: -100%;
+  border-radius: 50%;
+  background-color: rgba(64, 180, 255, 0.15);
+}
+.pearl-button .wrap::after {
+  left: 6%;
+  right: 6%;
+  top: 12%;
+  bottom: 40%;
+  border-radius: 22px 22px 0 0;
+  box-shadow: inset 0 10px 8px -10px rgba(129, 216, 255, 0.6);
+  background: linear-gradient(180deg, rgba(64, 180, 255, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
+}
+.pearl-button .wrap p .star-hover { display: none; }
+.pearl-button:hover .wrap p .star-idle  { display: none; }
+.pearl-button:hover .wrap p .star-hover { display: inline-block; }
+.pearl-button:hover {
+  box-shadow:
+    inset 0 0.3rem 0.5rem rgba(129, 216, 255, 0.4),
+    inset 0 -0.1rem 0.3rem rgba(0, 0, 0, 0.7),
+    inset 0 -0.4rem 0.9rem rgba(64, 180, 255, 0.6),
+    0 3rem 3rem rgba(0, 0, 0, 0.3),
+    0 1rem 1rem -0.6rem rgba(0, 0, 0, 0.8);
+  opacity: 1 !important;
+}
+.pearl-button:hover .wrap::before { transform: translateY(-5%); }
+.pearl-button:hover .wrap::after  { opacity: 0.4; transform: translateY(5%); }
+.pearl-button:hover .wrap p       { transform: translateY(-4%) !important; }
+.pearl-button:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 0.3rem 0.5rem rgba(129, 216, 255, 0.5),
+    inset 0 -0.1rem 0.3rem rgba(0, 0, 0, 0.8),
+    inset 0 -0.4rem 0.9rem rgba(64, 180, 255, 0.4),
+    0 1rem 1rem rgba(0, 0, 0, 0.3);
+}
+
+/* hide scrollbar (used inside the hero phone mock) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* thin, minimal scrollbar (no arrows) */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(17, 17, 17, 0.18) transparent;
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(17, 17, 17, 0.18);
+  border-radius: 9999px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(17, 17, 17, 0.3);
+}
+.thin-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Demo page-1: scale the whole stage up proportionally on larger      */
+/* laptops/monitors so it fills the screen the same way it does on a    */
+/* 13" (which stays untouched below 1600px). `zoom` keeps the exact     */
+/* ratio of every component; the min-height is divided by the zoom so   */
+/* page 1 still fits in exactly one screen (no scrollbar). In Chromium  */
+/* getBoundingClientRect reflects zoom, so the body-level guided-tour   */
+/* overlay stays aligned.                                               */
+@media (min-width: 1600px) {
+  .demo-scale-root { zoom: 1.13; }
+  .demo-scale-root > .demo-scale-grid { min-height: calc(100svh / 1.13); }
+}
+@media (min-width: 1920px) {
+  .demo-scale-root { zoom: 1.25; }
+  .demo-scale-root > .demo-scale-grid { min-height: calc(100svh / 1.25); }
+}
+@media (min-width: 2400px) {
+  .demo-scale-root { zoom: 1.4; }
+  .demo-scale-root > .demo-scale-grid { min-height: calc(100svh / 1.4); }
+}
+
+/* ---- Tracking motif animations (CSS-driven so they always run in prod) ---- */
+@keyframes cp-spin { to { transform: rotate(360deg); } }
+@keyframes cp-spin-y {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+@keyframes cp-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes cp-bob-sm {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.2px); }
+}
+@keyframes cp-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+@keyframes cp-rain {
+  0% { transform: translateY(-8px); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(36px); opacity: 0; }
+}
+@keyframes cp-streak {
+  0% { transform: translateY(0) rotate(16deg); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(24px) rotate(16deg); opacity: 0; }
+}
+@keyframes cp-flip {
+  0% { transform: rotateX(0deg); }
+  42%, 58% { transform: rotateX(-150deg); }
+  100% { transform: rotateX(0deg); }
+}
+@keyframes cp-snow {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+
+/* ============================================================
+   RETURNS PORTAL (rendered inside the /portal iframe)
+   ============================================================ */
+/* In @layer base so Tailwind utilities on a heading (text-slate-900, font-sans…) still win. */
+@layer base {
+  .portal-root {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    color: #0f172a;
+  }
+  .portal-root h1,
+  .portal-root h2,
+  .portal-root h3,
+  .portal-root h4,
+  .portal-root h5,
+  .portal-root h6 {
+    font-family: var(--font-playfair), ui-serif, Georgia, serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--portal-primary);
+  }
+}
+@keyframes portal-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes portal-pop-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.portal-fade { animation: portal-fade-in 0.2s ease-out; }
+.portal-pop { animation: portal-pop-in 0.2s ease-out; }
+.animate-fade-in { animation: portal-fade-in 0.2s ease-out; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+/* overflow-x:hidden on html/body turns them into scroll containers, which breaks the
+   portal's sticky glass stepper — clip hides overflow the same way without that. */
+html.portal-root,
+html.portal-root body {
+  overflow-x: clip;
+}
