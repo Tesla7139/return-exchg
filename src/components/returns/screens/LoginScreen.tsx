@@ -191,7 +191,7 @@ export function LoginScreen({ onComplete }: { onComplete: (d: OrderData) => void
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 w-full max-w-md space-y-6 lg:space-y-8"
+          className="relative z-10 my-auto w-full max-w-md space-y-6 lg:space-y-8"
         >
           <div className="space-y-5 text-center lg:space-y-6 lg:text-left">
             <div className="flex items-center justify-center lg:hidden">

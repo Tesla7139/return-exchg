@@ -412,3 +412,23 @@ html.portal-root,
 html.portal-root body {
   overflow-x: clip;
 }
+
+/* Portal scrollbar: slim and subtle instead of the thick OS default (esp. Windows). */
+html.portal-root {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.22) transparent;
+}
+html.portal-root ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+html.portal-root ::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.portal-root ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.22);
+  border-radius: 9999px;
+}
+html.portal-root ::-webkit-scrollbar-button {
+  display: none;
+}

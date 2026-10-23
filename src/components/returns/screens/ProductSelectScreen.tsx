@@ -221,7 +221,7 @@ export function ProductSelectScreen({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="lg:hidden px-4 py-4 flex items-center gap-3 bg-white border-b border-slate-100">
+            <div className="lg:hidden sticky top-[73px] z-30 px-4 py-4 flex items-center gap-3 bg-white border-b border-slate-100">
               <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-50 transition-colors">
                 <ChevronLeft className="w-6 h-6 text-slate-900" />
               </button>
@@ -328,11 +328,11 @@ export function ProductSelectScreen({
                               <Stars />
                               <span className="text-[10px] text-slate-400 font-medium">(2.4k)</span>
                             </div>
-                            <h3 className="font-serif font-bold text-slate-900 text-sm md:text-base leading-tight mb-2 line-clamp-2">
+                            <h3 className="font-serif font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2">
                               {item.title}
                             </h3>
                             <div className="flex flex-wrap justify-center items-baseline gap-x-2 mb-3 md:mb-4">
-                              <span className="text-base md:text-lg font-bold text-slate-900">{money(item.price)}</span>
+                              <span className="text-lg font-bold text-slate-900">{money(item.price)}</span>
                               {item.originalPrice > 0 && (
                                 <span className="text-xs md:text-sm text-slate-400 line-through decoration-slate-400/50">
                                   {money(item.originalPrice)}
@@ -347,9 +347,9 @@ export function ProductSelectScreen({
                                     openTracking(item.id);
                                   }
                                 }}
-                                className={`w-full py-2.5 px-2 md:px-4 rounded-[4px] font-bold text-[11px] md:text-xs uppercase whitespace-nowrap tracking-wider md:tracking-widest transition-all duration-200 ${
+                                className={`w-full py-3 px-2 md:px-4 rounded-[4px] font-bold text-xs uppercase whitespace-nowrap tracking-widest transition-all duration-200 ${
                                   finalSale
-                                    ? "bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200"
+                                    ? "bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200 !text-[11px] !tracking-normal md:!text-xs md:!tracking-widest"
                                     : transit
                                       ? "text-white hover:opacity-90 shadow-sm hover:shadow"
                                       : selected
@@ -456,11 +456,11 @@ export function ProductSelectScreen({
                             </div>
                           </div>
                           <div className="p-3 md:p-4 flex flex-col flex-1 text-center">
-                            <h3 className="font-serif font-bold text-slate-900 text-sm md:text-base leading-tight mb-2 line-clamp-2">
+                            <h3 className="font-serif font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2">
                               {item.title}
                             </h3>
                             <div className="flex flex-wrap justify-center items-baseline gap-x-2 mb-3 md:mb-4">
-                              <span className="text-base md:text-lg font-bold text-slate-900">{money(item.price)}</span>
+                              <span className="text-lg font-bold text-slate-900">{money(item.price)}</span>
                               {item.originalPrice > 0 && (
                                 <span className="text-xs md:text-sm text-slate-400 line-through decoration-slate-400/50">
                                   {money(item.originalPrice)}
@@ -903,7 +903,7 @@ export function ProductSelectScreen({
                   ))}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-serif text-[13px] font-bold text-slate-900 sm:text-sm md:text-lg">
+                <p className="truncate font-serif text-sm font-bold text-slate-900 md:text-lg">
                   {count} Item{count > 1 ? "s" : ""} Selected
                 </p>
                 <div className="mt-1 flex items-center gap-2">
@@ -926,7 +926,7 @@ export function ProductSelectScreen({
                   )}
                 </div>
               </div>
-              <Button variant="primary" size="md" onClick={handleContinue} className="flex-shrink-0 !gap-1.5 !px-3 !py-2.5 text-[13px] !tracking-wider md:!gap-2 md:!px-5 md:!py-3 md:text-base md:!tracking-widest">
+              <Button variant="primary" size="md" onClick={handleContinue} className="flex-shrink-0 !gap-1 !px-3 !py-3 text-[13px] !tracking-wider md:!gap-2 md:!px-5 md:text-base md:!tracking-widest">
                 Continue <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
               </Button>
             </div>

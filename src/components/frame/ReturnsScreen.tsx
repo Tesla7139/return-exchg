@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { BatteryFull, ChevronDown, ChevronRight, Signal, Wifi } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import type { Brand } from "@/lib/site";
 import { FEATURES, FRAME_ID, MOBILE_TOUR_STEPS, firstSectionStepForCard } from "@/lib/tour";
 import { BRAND_STORAGE_KEY } from "@/lib/returns/types";
@@ -234,25 +234,11 @@ export function ReturnsScreen({ brand }: { brand: Brand }) {
             transition={{ type: "spring", stiffness: 200, damping: 26 }}
             className={
               isMobileView
-                ? "relative flex h-full max-h-[860px] w-[360px] max-w-full flex-col overflow-hidden rounded-[2.8rem] bg-neutral-900 p-[9px] shadow-[0_45px_130px_-25px_rgba(0,0,0,0.75)] ring-1 ring-black/40"
+                ? "relative flex h-full max-h-[860px] w-[340px] max-w-full flex-col overflow-hidden rounded-[4px] bg-white shadow-[0_40px_120px_-20px_rgba(0,0,0,0.45)] ring-[3px] ring-neutral-900"
                 : "relative flex h-full w-full flex-col overflow-hidden rounded-lg bg-white shadow-[0_40px_120px_-20px_rgba(0,0,0,0.45)] ring-[3px] ring-neutral-900"
             }
           >
-            {isMobileView && (
-              <div className="relative z-20 flex h-9 shrink-0 items-center justify-between rounded-t-[2.3rem] bg-white px-6 text-[12px] font-semibold text-neutral-900">
-                <span className="tabular-nums">9:41</span>
-                <span className="absolute left-1/2 top-2 h-5 w-24 -translate-x-1/2 rounded-full bg-black" />
-                <span className="flex items-center gap-1.5">
-                  <Signal className="size-3.5" />
-                  <Wifi className="size-3.5" />
-                  <BatteryFull className="size-5" />
-                </span>
-              </div>
-            )}
-            <div
-              id={FRAME_ID}
-              className={`relative min-h-0 flex-1 overflow-hidden bg-white ${isMobileView ? "rounded-b-[2.3rem]" : ""}`}
-            >
+            <div id={FRAME_ID} className="relative min-h-0 flex-1 overflow-hidden bg-white">
               {iframe}
             </div>
           </motion.div>
